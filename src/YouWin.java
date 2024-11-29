@@ -10,28 +10,28 @@ import java.util.ArrayList;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-public class WelcomeScreen extends JPanel{
+public class YouWin extends JPanel{
 
-    public static void welcomeScreen(String[] args) {
+    public static void YouWinScreen(String[] args) {
+        Main.stopAndClearTimers();
 
         // Create the main frame
-        JFrame welcomeScreen;
-        welcomeScreen = new JFrame("Java Labs");
-        welcomeScreen.setSize(17*Main.tileSize,14*Main.tileSize + 32);
-        welcomeScreen.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        JFrame YouWinFrame;
+        YouWinFrame = new JFrame("You Win");
+        YouWinFrame.setSize(1080,720);
+        YouWinFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Create a custom panel for the background
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon backgroundImage = new ImageIcon("./img/WelcomeScreenBackground.jpg");
+                ImageIcon backgroundImage = new ImageIcon("./img/YouWin.png");
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
 
         backgroundPanel.setLayout(new GridLayout(4, 2));
-        welcomeScreen.setContentPane(backgroundPanel);
+        YouWinFrame.setContentPane(backgroundPanel);
 
         // Add a 'Start Game' button (on top of the background)
         JButton playButton = new JButton("");
@@ -44,7 +44,7 @@ public class WelcomeScreen extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Close the welcome screen and start the game
-                welcomeScreen.dispose();
+                YouWinFrame.dispose();
                 try {
                     Main.Game(); // Start the main game
                 } catch (Exception ex) {
@@ -63,7 +63,7 @@ public class WelcomeScreen extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Close the welcome screen and start the game
-                welcomeScreen.dispose();
+                YouWinFrame.dispose();
                 try {
                     System.exit(0);
                 } catch (Exception ex) {
@@ -82,8 +82,7 @@ public class WelcomeScreen extends JPanel{
         backgroundPanel.add(playButton); // Add the Play button
         backgroundPanel.add(quitButton);
 
-
         // Make the frame visible
-        welcomeScreen.setVisible(true);
+        YouWinFrame.setVisible(true);
     }
 }

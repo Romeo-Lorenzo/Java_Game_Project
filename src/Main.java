@@ -15,6 +15,7 @@ public class Main {
     static PhysicEngine physicEngine;
     static HUD hud;
     static List<Timer> timers = new ArrayList<>();
+    static int tileSize = 64;
 
 
     public Main() throws Exception {
@@ -28,7 +29,7 @@ public class Main {
 
 
         displayZoneFrame = new JFrame("Java Labs");
-        displayZoneFrame.setSize(400,600);
+        displayZoneFrame.setSize(17*tileSize,14*tileSize+32);
         displayZoneFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         DynamicSprite hero = new DynamicSprite(200,300,
@@ -40,6 +41,8 @@ public class Main {
 
         HUD hudStamina = new HUD(0,30,
                 ImageIO.read(new File("./img/stamina.png")),32,26, hero.getStaminaPoints());
+
+        DeathTimer deathTimer = new DeathTimer(30);
 
         hero.hearts = hudHearts;
         hero.stamina = hudStamina;
@@ -68,13 +71,14 @@ public class Main {
         renderEngine.addToRenderList(hero);
         renderEngine.addToRenderList(hudHearts);
         renderEngine.addToRenderList(hudStamina);
+        renderEngine.addToRenderList(deathTimer);
         physicEngine.addToMovingSpriteList(hero);
         physicEngine.setEnvironment(level.getSolidSpriteList());
 
         displayZoneFrame.addKeyListener(gameEngine);
     }
 
-    private static void stopAndClearTimers() {
+    public static void stopAndClearTimers() {
         for (Timer timer : timers) {
             if (timer != null) {
                 timer.stop();

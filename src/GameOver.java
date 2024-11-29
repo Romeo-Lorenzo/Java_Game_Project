@@ -13,6 +13,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class GameOver extends JPanel{
 
     public static void gameOverScreen(String[] args) {
+        Main.stopAndClearTimers();
 
         // Create the main frame
         JFrame gameOverFrame;
@@ -29,23 +30,20 @@ public class GameOver extends JPanel{
             }
         };
 
-        backgroundPanel.setLayout(new GridLayout(3, 2));
-        gameOverFrame.setContentPane(backgroundPanel); // Set the custom panel as the frame's content pane
+        backgroundPanel.setLayout(new GridLayout(4, 2));
+        gameOverFrame.setContentPane(backgroundPanel);
 
-        // Restart Buttom
+        // Add a 'Start Game' button (on top of the background)
+        JButton playButton = new JButton("");
+        playButton.setOpaque(false);
+        playButton.setContentAreaFilled(false);
+        playButton.setBorderPainted(false);
 
-        JButton restartButton = new JButton("Restart Game");
-        restartButton.setSize(70,50);
-        restartButton.setFont(new Font("Arial", Font.BOLD, 20));
-        restartButton.setForeground(Color.GREEN);
-        restartButton.setOpaque(false);
-        restartButton.setContentAreaFilled(false);
-        restartButton.setBorderPainted(false);
-
-        restartButton.addActionListener(new ActionListener() {
+        // Set up button action
+        playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Close the Game Over screen and start the game
+                // Close the welcome screen and start the game
                 gameOverFrame.dispose();
                 try {
                     Main.Game(); // Start the main game
@@ -55,22 +53,22 @@ public class GameOver extends JPanel{
             }
         });
 
-        // Quit Button
+        JButton quitButton = new JButton("");
+        quitButton.setForeground(Color.RED);
+        quitButton.setOpaque(false);
+        quitButton.setContentAreaFilled(false);
+        quitButton.setBorderPainted(false);
 
-        JButton quitbutton = new JButton("Quit Game");
-        quitbutton.setSize(70,50);
-        quitbutton.setFont(new Font("Arial", Font.BOLD, 20));
-        quitbutton.setForeground(Color.RED);
-        quitbutton.setOpaque(false);
-        quitbutton.setContentAreaFilled(false);
-        quitbutton.setBorderPainted(false);
-
-        quitbutton.addActionListener(new ActionListener() {
+        quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Close the Game Over screen and start the game
+                // Close the welcome screen and start the game
                 gameOverFrame.dispose();
-                System.exit(0);
+                try {
+                    System.exit(0);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -79,8 +77,10 @@ public class GameOver extends JPanel{
         backgroundPanel.add(new JLabel()); // Spacer
         backgroundPanel.add(new JLabel()); // Spacer
         backgroundPanel.add(new JLabel()); // Spacer
-        backgroundPanel.add(restartButton); // Add the button
-        backgroundPanel.add(quitbutton); // Add the button
+        backgroundPanel.add(new JLabel()); // Spacer
+        backgroundPanel.add(new JLabel()); // Spacer
+        backgroundPanel.add(playButton); // Add the Play button
+        backgroundPanel.add(quitButton);
 
         // Make the frame visible
         gameOverFrame.setVisible(true);

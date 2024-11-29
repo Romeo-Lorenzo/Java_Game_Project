@@ -43,7 +43,7 @@ public class DynamicSprite extends SolidSprite {
         super(x, y, image, width, height, lifePoints, staminaPoints);
     }
 
-    private boolean isMovingPossible(ArrayList<Sprite> environment) {
+    private int isMovingPossible(ArrayList<Sprite> environment) {
         Rectangle2D.Double moved = new Rectangle2D.Double();
         switch (direction) {
             case EAST:
@@ -81,13 +81,19 @@ public class DynamicSprite extends SolidSprite {
         }
 
         for (Sprite s : environment) {
-            if ((s instanceof SolidSprite) && (s != this)) {
-                if (((SolidSprite) s).intersect(moved)) {
-                    return false;
+            if (s != this) {
+                if (s instanceof SolidSprite && ((SolidSprite) s).intersect(moved))  {
+                    return 1;
+                }
+                if (s instanceof DeathSprite && ((DeathSprite) s).intersect(moved))  {
+                    return 2;
+                }
+                if (s instanceof WinSprite && ((WinSprite) s).intersect(moved))  {
+                    return 3;
                 }
             }
         }
-        return true;
+        return 0;
     }
 
     public void setDirection(Direction direction) {
@@ -136,10 +142,18 @@ public class DynamicSprite extends SolidSprite {
     }
 
     public void moveIfPossible(ArrayList<Sprite> environment) {
-        if (isMovingPossible(environment)) {
+        if (isMovingPossible(environment) == 0) {
             move();
-        } else {
+        } else if (isMovingPossible(environment) == 1) {
             this.changeLifePoints(-1);
+        }
+        else if(isMovingPossible(environment) == 2) {
+            Main.displayZoneFrame.dispose();
+            GameOver.gameOverScreen(null);
+        }
+        else if (isMovingPossible(environment) == 3) {
+            Main.displayZoneFrame.dispose();
+            YouWin.YouWinScreen(null);
         }
     }
 
@@ -168,12 +182,17 @@ public class DynamicSprite extends SolidSprite {
         if (invincibilityTimer != null) {
             invincibilityTimer.stop();
         }
+
         invincibilityTimer = new Timer(1000, e -> {
             isInvincible = false;
             isTakingDamage = false; // Reset flag after invincibility period
-            invincibilityTimer.stop();
+            invincibilityTimer.stop(); // Ensure the timer is stopped
         });
+
+        invincibilityTimer.setRepeats(false); // Ensure the timer does not repeat
+        invincibilityTimer.start(); // Start the timer
     }
+
 
     public void decreaseStamina() {
         if (stamina != null && stamina.getNumber() > 0) {

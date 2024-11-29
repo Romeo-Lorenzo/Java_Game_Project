@@ -14,20 +14,21 @@ public class GameEngine implements Engine, KeyListener {
 
     public GameEngine(DynamicSprite hero, HUD hud) {
         this.hero = hero;
+
         this.staminaDepletionTimer = new Timer(1000, e -> {
             if (hero.getRunning()) {
                 hero.decreaseStamina();
             }
         });
+        this.staminaDepletionTimer.start();
+
         this.staminaRegenTimer = new Timer(2000, e -> {
             if (!hero.getRunning()) {
                 hero.regenerateStamina();
             }
         });
-        this.staminaDepletionTimer.start();
         this.staminaRegenTimer.start();
     }
-
 
     @Override
     public void update() {

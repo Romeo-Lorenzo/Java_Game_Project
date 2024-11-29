@@ -15,6 +15,7 @@ public class Playground {
             final Image imageGrass = ImageIO.read(new File("./img/grass.png"));
             final Image imageRock = ImageIO.read(new File("./img/rock.png"));
             final Image imageTrap = ImageIO.read(new File("./img/trap.png"));
+            final Image imageWormhole = ImageIO.read(new File("./img/Exit.png"));
             final Image pathNorth = ImageIO.read(new File("./img/grassPathNorth.png"));
             final Image pathEast = ImageIO.read(new File("./img/grassPathEast.png"));
             final Image pathSouth = ImageIO.read(new File("./img/grassPathSouth.png"));
@@ -29,6 +30,12 @@ public class Playground {
 
             final int imageRockWidth = imageRock.getWidth(null);
             final int imageRockHeight = imageRock.getHeight(null);
+
+            final int imageTrapWidth = imageRock.getWidth(null);
+            final int imageTrapHeight = imageRock.getHeight(null);
+
+            final int imageWormholeWidth = imageGrass.getWidth(null);
+            final int imageWormholeHeight = imageGrass.getHeight(null);
 
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader(pathName));
@@ -59,6 +66,12 @@ public class Playground {
                         case 'W' : environment.add(new Sprite(columnNumber*imageGrassWidth,
                                 lineNumber*imageGrassHeight, pathWest, imageGrassWidth, imageGrassHeight, null, null));
                             break;
+                        case 'P' : environment.add(new DeathSprite(columnNumber*imageTrapWidth,
+                                lineNumber*imageTrapHeight, imageTrap, imageGrassWidth, imageGrassHeight));
+                            break;
+                        case 'X' : environment.add(new WinSprite(columnNumber*imageWormholeWidth,
+                                lineNumber*imageWormholeHeight, imageWormhole, imageWormholeWidth, imageWormholeHeight));
+                            break;
                     }
                     columnNumber++;
                 }
@@ -75,7 +88,7 @@ public class Playground {
     public ArrayList<Sprite> getSolidSpriteList(){
         ArrayList <Sprite> solidSpriteArrayList = new ArrayList<>();
         for (Sprite sprite : environment){
-            if (sprite instanceof SolidSprite) solidSpriteArrayList.add(sprite);
+            if (sprite instanceof SolidSprite || sprite instanceof DeathSprite || sprite instanceof WinSprite) solidSpriteArrayList.add(sprite);
         }
         return solidSpriteArrayList;
     }
