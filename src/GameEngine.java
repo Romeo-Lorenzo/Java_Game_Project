@@ -8,7 +8,6 @@ import java.util.Set;
 public class GameEngine implements Engine, KeyListener {
     private DynamicSprite hero;
     private ArrayList<Sprite> environment;
-    private Timer gameLoopTimer;
     private Set<Integer> pressedKeys = new HashSet<>();
     private Timer staminaDepletionTimer;
     private Timer staminaRegenTimer;
@@ -17,12 +16,12 @@ public class GameEngine implements Engine, KeyListener {
         this.hero = hero;
         this.staminaDepletionTimer = new Timer(1000, e -> {
             if (hero.getRunning()) {
-                hero.decreaseStamina(1);
+                hero.decreaseStamina();
             }
         });
         this.staminaRegenTimer = new Timer(2000, e -> {
             if (!hero.getRunning()) {
-                hero.regenerateStamina(1);
+                hero.regenerateStamina();
             }
         });
         this.staminaDepletionTimer.start();

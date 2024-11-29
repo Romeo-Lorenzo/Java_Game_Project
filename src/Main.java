@@ -32,16 +32,17 @@ public class Main {
         displayZoneFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         DynamicSprite hero = new DynamicSprite(200,300,
-                ImageIO.read(new File("./img/heroTileSheetLowRes.png")),48,50, (double) 5, (double) 5);
+                ImageIO.read(new File("./img/heroTileSheetLowRes.png")),48,50, (double) 5,
+                (double) 5);
 
-        HUD hudhearts = new HUD(0,0,
+        HUD hudHearts = new HUD(0,0,
                 ImageIO.read(new File("./img/heart.png")),32,26, hero.getLifePoints());
 
-        HUD hudstamina = new HUD(0,30,
+        HUD hudStamina = new HUD(0,30,
                 ImageIO.read(new File("./img/stamina.png")),32,26, hero.getStaminaPoints());
 
-        hero.hearts = hudhearts;
-        hero.stamina = hudstamina;
+        hero.hearts = hudHearts;
+        hero.stamina = hudStamina;
 
         renderEngine = new RenderEngine(displayZoneFrame);
         physicEngine = new PhysicEngine();
@@ -65,8 +66,8 @@ public class Main {
         Playground level = new Playground("./data/level1.txt");
         renderEngine.addToRenderList(level.getSpriteList());
         renderEngine.addToRenderList(hero);
-        renderEngine.addToRenderList(hudhearts);
-        renderEngine.addToRenderList(hudstamina);
+        renderEngine.addToRenderList(hudHearts);
+        renderEngine.addToRenderList(hudStamina);
         physicEngine.addToMovingSpriteList(hero);
         physicEngine.setEnvironment(level.getSolidSpriteList());
 
@@ -81,7 +82,6 @@ public class Main {
         }
         timers.clear();
     }
-
 
     public static void main (String[] args) throws Exception {
         // write your code here

@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -13,7 +14,6 @@ public class DynamicSprite extends SolidSprite {
     private boolean isTakingDamage = false; // Add this flag
     private final int spriteSheetNumberOfColumn = 10;
     private Timer invincibilityTimer;
-    private Timer sprintTimer;
     private boolean isRunning = false;
 
     HUD hearts;
@@ -168,28 +168,26 @@ public class DynamicSprite extends SolidSprite {
         if (invincibilityTimer != null) {
             invincibilityTimer.stop();
         }
-
-        invincibilityTimer = new Timer(2000, e -> {
+        invincibilityTimer = new Timer(1000, e -> {
             isInvincible = false;
             isTakingDamage = false; // Reset flag after invincibility period
             invincibilityTimer.stop();
         });
     }
 
-    public void decreaseStamina(double delta) {
+    public void decreaseStamina() {
         if (stamina != null && stamina.getNumber() > 0) {
-            stamina.changeNumber(-delta);
+            stamina.changeNumber(-1);
             if (stamina.getNumber() <= 0) {
                 setRunning(false); // Stop running if stamina is depleted
             }
         }
     }
 
-    public void regenerateStamina(double delta) {
+    public void regenerateStamina() {
         if (stamina != null) {
-            stamina.changeNumber(delta);
-            if (stamina.getNumber() > staminaPoints) {
-                stamina.changeNumber(staminaPoints - stamina.getNumber()); // Cap stamina at max value
+            if (stamina.getNumber() < staminaPoints) {
+                stamina.changeNumber(1);
             }
         }
     }
