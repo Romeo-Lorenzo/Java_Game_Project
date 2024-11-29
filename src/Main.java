@@ -45,7 +45,7 @@ public class Main {
 
         renderEngine = new RenderEngine(displayZoneFrame);
         physicEngine = new PhysicEngine();
-        gameEngine = new GameEngine(hero);
+        gameEngine = new GameEngine(hero, hud);
 
         Timer renderTimer = new Timer(50,(time)-> renderEngine.update());
         Timer gameTimer = new Timer(50,(time)-> gameEngine.update());

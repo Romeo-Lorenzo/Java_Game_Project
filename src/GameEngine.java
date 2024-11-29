@@ -10,10 +10,25 @@ public class GameEngine implements Engine, KeyListener {
     private ArrayList<Sprite> environment;
     private Timer gameLoopTimer;
     private Set<Integer> pressedKeys = new HashSet<>();
+    private Timer staminaDepletionTimer;
+    private Timer staminaRegenTimer;
 
-    public GameEngine(DynamicSprite hero) {
+    public GameEngine(DynamicSprite hero, HUD hud) {
         this.hero = hero;
+        this.staminaDepletionTimer = new Timer(1000, e -> {
+            if (hero.getRunning()) {
+                hero.decreaseStamina(1);
+            }
+        });
+        this.staminaRegenTimer = new Timer(2000, e -> {
+            if (!hero.getRunning()) {
+                hero.regenerateStamina(1);
+            }
+        });
+        this.staminaDepletionTimer.start();
+        this.staminaRegenTimer.start();
     }
+
 
     @Override
     public void update() {
@@ -35,6 +50,9 @@ public class GameEngine implements Engine, KeyListener {
         if (pressedKeys.isEmpty()) {
             hero.setWalking(false);
         }
+        if (!pressedKeys.contains(KeyEvent.VK_SHIFT)) {
+            hero.setRunning(false); // Stop running if Shift key is released
+        }
     }
 
     private void updateMovement() {
@@ -44,12 +62,12 @@ public class GameEngine implements Engine, KeyListener {
         boolean right = pressedKeys.contains(KeyEvent.VK_D);
         boolean sprint = pressedKeys.contains(KeyEvent.VK_SHIFT);
 
-        if (sprint){
+        if (sprint) {
             hero.setRunning(true);
-        }
-        else if (!sprint){
+        } else {
             hero.setRunning(false);
         }
+
         if (up && left) {
             hero.setWalking(true);
             hero.setDirection(Direction.NORTH_WEST);

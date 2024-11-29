@@ -24,7 +24,15 @@ public class DynamicSprite extends SolidSprite {
     }
 
     public void setRunning(boolean running) {
-        isRunning = running;
+        if (running && hasStamina()) {
+            isRunning = true;
+        } else {
+            isRunning = false;
+        }
+    }
+
+    public boolean getRunning() {
+        return isRunning;
     }
 
     public void setSpeed(double speed) {
@@ -153,24 +161,6 @@ public class DynamicSprite extends SolidSprite {
         }
     }
 
-    public void changeStaminaPoints(double change) {
-        if (!isInvincible && this.lifePoints != null) {
-            this.lifePoints = this.lifePoints + change;
-            if (this.lifePoints < 0) {
-                this.lifePoints = (double) 0;
-            }
-            if (this.lifePoints == 0) {
-                Main.displayZoneFrame.dispose();
-                this.lifePoints = null;
-                GameOver.gameOverScreen(null);
-            }
-            if (hearts != null) {
-                hearts.changeNumber(change);
-            }
-            startInvincibility();
-        }
-    }
-
     private void startInvincibility() {
         isInvincible = true;
         isTakingDamage = true; // Set flag to true when taking damage
@@ -185,6 +175,29 @@ public class DynamicSprite extends SolidSprite {
             invincibilityTimer.stop();
         });
     }
+
+    public void decreaseStamina(double delta) {
+        if (stamina != null && stamina.getNumber() > 0) {
+            stamina.changeNumber(-delta);
+            if (stamina.getNumber() <= 0) {
+                setRunning(false); // Stop running if stamina is depleted
+            }
+        }
+    }
+
+    public void regenerateStamina(double delta) {
+        if (stamina != null) {
+            stamina.changeNumber(delta);
+            if (stamina.getNumber() > staminaPoints) {
+                stamina.changeNumber(staminaPoints - stamina.getNumber()); // Cap stamina at max value
+            }
+        }
+    }
+
+    public boolean hasStamina() {
+        return stamina != null && stamina.getNumber() > 0;
+    }
+
 
     @Override
     public void draw(Graphics g) {
